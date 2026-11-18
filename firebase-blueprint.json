@@ -1,0 +1,325 @@
+{
+  "entities": {
+    "UserProfile": {
+      "title": "UserProfile",
+      "description": "Public user profile document stored in the users collection.",
+      "type": "object",
+      "properties": {
+        "uid": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128,
+          "pattern": "^[a-zA-Z0-9_\\-]+$",
+          "description": "Firebase Auth UID of the user."
+        },
+        "username": {
+          "type": "string",
+          "minLength": 3,
+          "maxLength": 30,
+          "pattern": "^[a-z0-9_]+$",
+          "description": "Unique lowercase alphanumeric and underscore handle."
+        },
+        "displayName": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 60,
+          "description": "User public display name."
+        },
+        "bio": {
+          "type": "string",
+          "maxLength": 200,
+          "description": "Short user biography."
+        },
+        "photoURL": {
+          "type": "string",
+          "maxLength": 1000,
+          "description": "Download URL for the user profile avatar."
+        },
+        "followersCount": {
+          "type": "integer",
+          "description": "Number of followers."
+        },
+        "followingCount": {
+          "type": "integer",
+          "description": "Number of accounts followed."
+        },
+        "postsCount": {
+          "type": "integer",
+          "description": "Number of published posts."
+        },
+        "isPrivate": {
+          "type": "boolean",
+          "description": "Whether the profile is set to private."
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Server timestamp when the profile was created."
+        }
+      },
+      "required": [
+        "uid",
+        "username",
+        "displayName",
+        "bio",
+        "photoURL",
+        "followersCount",
+        "followingCount",
+        "postsCount",
+        "isPrivate",
+        "createdAt"
+      ]
+    },
+    "UsernameReservation": {
+      "title": "UsernameReservation",
+      "description": "Unique username reservation mapping lowercase handle to owner UID.",
+      "type": "object",
+      "properties": {
+        "uid": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128,
+          "pattern": "^[a-zA-Z0-9_\\-]+$"
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time"
+        }
+      },
+      "required": ["uid", "createdAt"]
+    },
+    "Post": {
+      "title": "Post",
+      "description": "Photo post with 1-10 images, caption, hashtags, and engagement counts.",
+      "type": "object",
+      "properties": {
+        "postId": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128,
+          "pattern": "^[a-zA-Z0-9_\\-]+$"
+        },
+        "authorId": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128,
+          "pattern": "^[a-zA-Z0-9_\\-]+$"
+        },
+        "authorUsername": {
+          "type": "string",
+          "minLength": 3,
+          "maxLength": 30,
+          "pattern": "^[a-z0-9_]+$"
+        },
+        "authorPhotoURL": {
+          "type": "string",
+          "maxLength": 1000
+        },
+        "authorIsPrivate": {
+          "type": "boolean"
+        },
+        "imageURLs": {
+          "type": "array",
+          "description": "1 to 10 image URLs uploaded to Firebase Storage."
+        },
+        "caption": {
+          "type": "string",
+          "maxLength": 2200
+        },
+        "hashtags": {
+          "type": "array",
+          "description": "Up to 30 lowercase hashtags parsed from caption."
+        },
+        "location": {
+          "type": "string",
+          "maxLength": 100
+        },
+        "likesCount": {
+          "type": "integer"
+        },
+        "commentsCount": {
+          "type": "integer"
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time"
+        }
+      },
+      "required": [
+        "postId",
+        "authorId",
+        "authorUsername",
+        "authorPhotoURL",
+        "authorIsPrivate",
+        "imageURLs",
+        "caption",
+        "hashtags",
+        "location",
+        "likesCount",
+        "commentsCount",
+        "createdAt"
+      ]
+    },
+    "FollowerEdge": {
+      "title": "FollowerEdge",
+      "description": "Follower relationship stored under users/{uid}/followers/{followerId}.",
+      "type": "object",
+      "properties": {
+        "uid": { "type": "string", "minLength": 1, "maxLength": 128 },
+        "username": { "type": "string", "minLength": 3, "maxLength": 30 },
+        "displayName": { "type": "string", "minLength": 1, "maxLength": 60 },
+        "photoURL": { "type": "string", "maxLength": 1000 },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["uid", "username", "displayName", "photoURL", "createdAt"]
+    },
+    "FollowRequest": {
+      "title": "FollowRequest",
+      "description": "Pending follow request for a private user.",
+      "type": "object",
+      "properties": {
+        "uid": { "type": "string", "minLength": 1, "maxLength": 128 },
+        "username": { "type": "string", "minLength": 3, "maxLength": 30 },
+        "displayName": { "type": "string", "minLength": 1, "maxLength": 60 },
+        "photoURL": { "type": "string", "maxLength": 1000 },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["uid", "username", "displayName", "photoURL", "createdAt"]
+    },
+    "SavedPostRef": {
+      "title": "SavedPostRef",
+      "description": "Bookmark reference stored under users/{uid}/saved/{postId}.",
+      "type": "object",
+      "properties": {
+        "postId": { "type": "string", "minLength": 1, "maxLength": 128 },
+        "authorId": { "type": "string", "minLength": 1, "maxLength": 128 },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["postId", "authorId", "createdAt"]
+    },
+    "PrivateFeedRef": {
+      "title": "PrivateFeedRef",
+      "description": "Post pointer fanned out to accepted followers of private accounts.",
+      "type": "object",
+      "properties": {
+        "postId": { "type": "string", "minLength": 1, "maxLength": 128 },
+        "authorId": { "type": "string", "minLength": 1, "maxLength": 128 },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["postId", "authorId", "createdAt"]
+    },
+    "RecentSearch": {
+      "title": "RecentSearch",
+      "description": "Recent search history item per user.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "minLength": 1, "maxLength": 128 },
+        "type": { "type": "string", "enum": ["user", "hashtag"] },
+        "query": { "type": "string", "minLength": 1, "maxLength": 60 },
+        "label": { "type": "string", "minLength": 1, "maxLength": 80 },
+        "targetUid": { "type": "string", "maxLength": 128 },
+        "photoURL": { "type": "string", "maxLength": 1000 },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["id", "type", "query", "label", "targetUid", "photoURL", "createdAt"]
+    },
+    "PostLike": {
+      "title": "PostLike",
+      "description": "Like document under posts/{postId}/likes/{uid}.",
+      "type": "object",
+      "properties": {
+        "uid": { "type": "string", "minLength": 1, "maxLength": 128 },
+        "username": { "type": "string", "minLength": 3, "maxLength": 30 },
+        "displayName": { "type": "string", "minLength": 1, "maxLength": 60 },
+        "photoURL": { "type": "string", "maxLength": 1000 },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["uid", "username", "displayName", "photoURL", "createdAt"]
+    },
+    "Comment": {
+      "title": "Comment",
+      "description": "Comment or 1-level reply under posts/{postId}/comments/{commentId}.",
+      "type": "object",
+      "properties": {
+        "commentId": { "type": "string", "minLength": 1, "maxLength": 128 },
+        "authorId": { "type": "string", "minLength": 1, "maxLength": 128 },
+        "username": { "type": "string", "minLength": 3, "maxLength": 30 },
+        "photoURL": { "type": "string", "maxLength": 1000 },
+        "text": { "type": "string", "minLength": 1, "maxLength": 1000 },
+        "likesCount": { "type": "integer" },
+        "parentId": { "type": "string", "maxLength": 128 },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": [
+        "commentId",
+        "authorId",
+        "username",
+        "photoURL",
+        "text",
+        "likesCount",
+        "parentId",
+        "createdAt"
+      ]
+    },
+    "CommentLike": {
+      "title": "CommentLike",
+      "description": "Like document under posts/{postId}/comments/{commentId}/likes/{uid}.",
+      "type": "object",
+      "properties": {
+        "uid": { "type": "string", "minLength": 1, "maxLength": 128 },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["uid", "createdAt"]
+    }
+  },
+  "firestore": {
+    "/users/{userId}": {
+      "schema": { "$ref": "#/entities/UserProfile" },
+      "description": "User profile documents keyed by Firebase Auth UID."
+    },
+    "/usernames/{username}": {
+      "schema": { "$ref": "#/entities/UsernameReservation" },
+      "description": "Atomic uniqueness index for user handles."
+    },
+    "/users/{userId}/followers/{followerId}": {
+      "schema": { "$ref": "#/entities/FollowerEdge" },
+      "description": "Users following userId."
+    },
+    "/users/{userId}/following/{followedId}": {
+      "schema": { "$ref": "#/entities/FollowerEdge" },
+      "description": "Users followed by userId."
+    },
+    "/users/{userId}/followRequests/{requesterId}": {
+      "schema": { "$ref": "#/entities/FollowRequest" },
+      "description": "Pending follow requests for private accounts."
+    },
+    "/users/{userId}/saved/{postId}": {
+      "schema": { "$ref": "#/entities/SavedPostRef" },
+      "description": "Bookmarked posts for userId."
+    },
+    "/users/{userId}/privateFeed/{postId}": {
+      "schema": { "$ref": "#/entities/PrivateFeedRef" },
+      "description": "Post pointers visible to accepted followers of private accounts."
+    },
+    "/users/{userId}/recentSearches/{searchId}": {
+      "schema": { "$ref": "#/entities/RecentSearch" },
+      "description": "Recent search items saved per user."
+    },
+    "/posts/{postId}": {
+      "schema": { "$ref": "#/entities/Post" },
+      "description": "Posts created by users."
+    },
+    "/posts/{postId}/likes/{uid}": {
+      "schema": { "$ref": "#/entities/PostLike" },
+      "description": "Likes on a post."
+    },
+    "/posts/{postId}/comments/{commentId}": {
+      "schema": { "$ref": "#/entities/Comment" },
+      "description": "Comments and 1-level replies on a post."
+    },
+    "/posts/{postId}/comments/{commentId}/likes/{uid}": {
+      "schema": { "$ref": "#/entities/CommentLike" },
+      "description": "Likes on a comment."
+    }
+  }
+}

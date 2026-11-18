@@ -1,0 +1,6 @@
+{
+  "name": "Frame",
+  "description": "Minimal social profile foundation with Firebase Authentication, Firestore user profiles, and Firebase Storage avatars.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
